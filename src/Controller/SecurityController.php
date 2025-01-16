@@ -43,7 +43,7 @@ class SecurityController extends AbstractController
     {
         if ($user === null) {
             return new JsonResponse(
-                ["message" => "Missing credentials"],
+                ["message" => "Authentification nécessaire"],
                 Response::HTTP_UNAUTHORIZED
             );
         }
