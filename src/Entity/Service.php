@@ -35,6 +35,9 @@ class Service
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,5 +126,17 @@ class Service
     public function getImageName(): ?string
     {
         return $this->imageName;
+    }
+
+    public function setImageSize(?int $imageSize): static
+    {
+        $this->imageSize = $imageSize;
+
+        return $this;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
     }
 }
