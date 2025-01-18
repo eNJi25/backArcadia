@@ -36,7 +36,7 @@ class AvisController extends AbstractController
 
         return new JsonResponse(
             ["message" => "Erreur lors de l'envoi de votre avis"],
-            Response::HTTP_NO_CONTENT
+            Response::HTTP_NOT_FOUND
         );
     }
 

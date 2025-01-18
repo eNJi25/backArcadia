@@ -40,10 +40,7 @@ class ServiceController extends AbstractController
         $this->repo->save($service, true);
 
         return new JsonResponse(
-            [
-                'message' => 'Service créé avec succès',
-                'id' => $service->getId()
-            ],
+            ['message' => 'Service créé avec succès',],
             Response::HTTP_CREATED,
         );
     }
