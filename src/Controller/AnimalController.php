@@ -114,7 +114,6 @@ class AnimalController extends AbstractController
                 ["message" => "Animal modifié avec succès"],
                 Response::HTTP_OK
             );
-
         } catch (Exception $e) {
             return new JsonResponse(
                 ['message' => 'Erreur lors de la modification de l\'animal : ' . $e->getMessage()],
@@ -133,6 +132,54 @@ class AnimalController extends AbstractController
             return new JsonResponse(["message" => "Animal supprimé avec succès"], Response::HTTP_OK);
         }
 
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        return new JsonResponse(["message" => "Aucun animal trouvé"], Response::HTTP_NOT_FOUND);
+    }
+
+    #[Route('/show/{id}', name: 'show', methods: 'GET')]
+    public function show(int $id): JsonResponse
+    {
+        $animal = $this->animalRepo->findOneBy(['id' => $id]);
+        $image = $this->imageRepo->findOneBy(['animal' => $id]);
+
+        if ($animal && $image) {
+            $responseData = [
+                'prenom' => $animal->getPrenom(),
+                'race' => $animal->getRace() ? $animal->getRace()->getNom() : null,
+                'image' => $image->getImageName(),
+                'nourritureDernierRepas' => $animal->getNourritureDernierRepas() ? $animal->getNourritureDernierRepas() : null,
+                'quantiteDernierRepas' => $animal->getNourritureDernierRepas() ? $animal->getQuantiteDernierRepas() : null,
+                'dateDernierRepas' => $animal->getNourritureDernierRepas() ? $animal->getDateDernierRepas() : null,
+            ];
+            return new JsonResponse($responseData, Response::HTTP_OK);
+        }
+
+
+        return new JsonResponse(["message" => "Aucun animal trouvé"], Response::HTTP_NOT_FOUND);
+    }
+
+    #[Route(path: '/lastMeal/{id}', name: 'last_meal', methods: 'POST')]
+    public function lastMeal(Request $request, int $id)
+    {
+        if ($request) {
+            $animalData = $request->request->all();
+            $animal = $this->animalRepo->findOneBy(['id' => $id]);
+            
+            $animal->setNourritureDernierRepas($animalData['nourriture_dernier_repas']);
+            $animal->setQuantiteDernierRepas($animalData['quantite_dernier_repas']);
+            $animal->setDateDernierRepas(new \DateTimeImmutable());
+            $animal->setUpdatedAt(new \DateTimeImmutable());
+
+            $this->animalRepo->save($animal, true);
+
+            return new JsonResponse(
+                ["message" => "Dernier repas de l'animal enregisré"],
+                Response::HTTP_CREATED
+            );
+        }
+
+        return new JsonResponse(
+            ["message" => "Erreur lors de l'envoi du dernier repas de l'animal"],
+            Response::HTTP_NOT_FOUND
+        );
     }
 }
