@@ -66,12 +66,73 @@ class AnimalController extends AbstractController
             }
 
             return new JsonResponse(["message" => "Animal crée avec succés"], Response::HTTP_CREATED);
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
-                ['message' => 'Erreur lors de la création de l\'habitat : ' . $e->getMessage()],
+                ['message' => 'Erreur lors de la création de l\'animal : ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    #[Route('/edit/{id}', name: 'edit', methods: 'POST')]
+    public function edit(Request $request, int $id): JsonResponse
+    {
+        try {
+            $animalData = $request->request->all();
+            $animal = $this->animalRepo->findOneBy(['id' => $id]);
+            $file = $request->files->get('imageFile');
+
+            if ($file) {
+                $image = $this->imageRepo->findOneBy(['animal_id' => $id]);
+                $image->setImageFile($file);
+                $this->imageRepo->save($image, true);
+            }
+
+            if (isset($animalData['habitat'])) {
+                $animal->setHabitat($animalData['habitat']);
+            }
+
+            if (isset($animalData['prenom'])) {
+                $animal->setPrenom($animalData['prenom']);
+            }
+
+            if (isset($animalData['race'])) {
+                $race = $this->raceRepo->findOneBy(['nom' => $animalData['race']]);
+                if (!$race) {
+                    $race = new Race();
+                    $race->setNom($animalData['race']);
+                    $race->setCreatedAt(new \DateTimeImmutable());
+                    $this->raceRepo->save($race, true);
+                }
+            }
+
+            $animal->setUpdatedAt(new \DateTimeImmutable());
+
+            $this->animalRepo->save($animal, true);
+
+            return new JsonResponse(
+                ["message" => "Animal modifié avec succès"],
+                Response::HTTP_OK
+            );
+
+        } catch (Exception $e) {
+            return new JsonResponse(
+                ['message' => 'Erreur lors de la modification de l\'animal : ' . $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route('/delete/{id}', name: 'delete', methods: 'DELETE')]
+    public function delete(int $id): JsonResponse
+    {
+        $animal = $this->animalRepo->findOneBy(['id' => $id]);
+        if ($animal) {
+            $this->animalRepo->remove($animal, true);
+
+            return new JsonResponse(["message" => "Animal supprimé avec succès"], Response::HTTP_OK);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 }
