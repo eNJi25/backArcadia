@@ -83,7 +83,7 @@ class AnimalController extends AbstractController
             $file = $request->files->get('imageFile');
 
             if ($file) {
-                $image = $this->imageRepo->findOneBy(['animal_id' => $id]);
+                $image = $this->imageRepo->findOneBy(['animal' => $id]);
                 $image->setImageFile($file);
                 $this->imageRepo->save($image, true);
             }
@@ -143,6 +143,7 @@ class AnimalController extends AbstractController
 
         if ($animal && $image) {
             $responseData = [
+                'id' => $animal->getId(),
                 'prenom' => $animal->getPrenom(),
                 'race' => $animal->getRace() ? $animal->getRace()->getNom() : null,
                 'image' => $image->getImageName(),
@@ -163,7 +164,7 @@ class AnimalController extends AbstractController
         if ($request) {
             $animalData = $request->request->all();
             $animal = $this->animalRepo->findOneBy(['id' => $id]);
-            
+
             $animal->setNourritureDernierRepas($animalData['nourriture_dernier_repas']);
             $animal->setQuantiteDernierRepas($animalData['quantite_dernier_repas']);
             $animal->setDateDernierRepas(new \DateTimeImmutable());
@@ -181,5 +182,87 @@ class AnimalController extends AbstractController
             ["message" => "Erreur lors de l'envoi du dernier repas de l'animal"],
             Response::HTTP_NOT_FOUND
         );
+    }
+
+    #[Route('/showlastAnimals/{habitatId}', name: 'show_lastAnimal_byHabitat', methods: 'GET')]
+    public function showLastAnimalsByHabitat(int $habitatId): JsonResponse
+    {
+        $habitat = $this->habitatRepo->findOneBy(['id' => $habitatId]);
+
+        if (!$habitat) {
+            return new JsonResponse(['message' => 'Habitat non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+
+        $animals = $this->animalRepo->findBy(
+            ['habitat' => $habitat],
+            ['id' => 'DESC'],
+            4
+        );
+
+        $data = [];
+        foreach ($animals as $animal) {
+            $image = $this->imageRepo->findOneBy(['animal' => $animal->getId()]);
+            $data[] = [
+                'prenom' => $animal->getPrenom(),
+                'imageSlug' => $image->getImageName()
+            ];
+        }
+
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
+
+    #[Route('/showAllAnimals/{habitatId}', name: 'show_AllAnimal_byHabitat', methods: 'GET')]
+    public function showAllAnimalsByHabitat(int $habitatId): JsonResponse
+    {
+        $habitat = $this->habitatRepo->findOneBy(['id' => $habitatId]);
+
+        if (!$habitat) {
+            return new JsonResponse(['message' => 'Habitat non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+
+        $animals = $this->animalRepo->findBy(
+            ['habitat' => $habitat]
+        );
+
+        $data = [];
+        foreach ($animals as $animal) {
+            $image = $this->imageRepo->findOneBy(['animal' => $animal->getId()]);
+            $data[] = [
+                'id' => $animal->getId(),
+                'prenom' => $animal->getPrenom(),
+                'imageSlug' => $image->getImageName()
+            ];
+        }
+
+        return new JsonResponse($data, Response::HTTP_OK);
+    }
+
+    #[Route('/showAnimalsHome', name: 'show_animals_home', methods: 'GET')]
+    public function showAllAnimals(): JsonResponse
+    {
+        $habitats = $this->habitatRepo->findAll();
+        $animalsData = [];
+
+        foreach ($habitats as $habitat) {
+            $animal = $this->animalRepo->findOneBy(['habitat' => $habitat]);
+            $image = $this->imageRepo->findOneBy(['animal' => $animal]);
+            if ($animal) {
+
+                $data = [
+                    'animal' => [
+                        'id' => $animal->getId(),
+                        'prenom' => $animal->getPrenom(),
+                        'imageSlug' => $image->getImageName()
+                    ]
+                ];
+
+                $animalsData[] = $data;
+            }
+        }
+        if (empty($animalsData)) {
+            return new JsonResponse(['message' => 'Aucun animal trouvé pour les habitats'], Response::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse($animalsData, Response::HTTP_OK);
     }
 }
