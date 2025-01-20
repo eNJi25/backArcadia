@@ -88,7 +88,7 @@ class ServiceController extends AbstractController
                 'message' => 'Service modifié avec succès',
                 'id' => $service->getId()
             ],
-            Response::HTTP_CREATED,
+            Response::HTTP_OK,
         );
     }
 

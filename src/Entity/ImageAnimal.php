@@ -19,7 +19,7 @@ class ImageAnimal
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'imageAnimals')]
+    #[ORM\ManyToOne(inversedBy: 'imageAnimals', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Animal $animal = null;
 

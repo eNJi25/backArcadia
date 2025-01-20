@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Habitat;
 use App\Repository\HabitatRepository;
 use DateTimeImmutable;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ class HabitatController extends AbstractController
                 ['message' => 'Habitat créé avec succès'],
                 Response::HTTP_CREATED,
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse(
                 ['message' => 'Erreur lors de la création de l\'habitat : ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
