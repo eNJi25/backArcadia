@@ -30,20 +30,25 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/arcadia/api/registration, roles: ROLE_ADMIN }
-    - { path: ^/arcadia/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/animal/show/{id}, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/animal/showlastAnimals/{habitatId}, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/animal/showAllAnimals/{habitatId}, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/animal/showAnimalsHome, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/animal/showAllAnimals/{habitatId}, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/avis/new, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/avis/valides, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/habitat/showAll, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/habitat/show/{id}, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/rapport/last/{animalId}, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api/service/showAll, roles: PUBLIC_ACCESS }
-    - { path: ^/arcadia/api, roles: ROLE_USER }
+    - { path: "^/arcadia/api/login", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/animal/show/{id}", roles: PUBLIC_ACCESS }
+    - {
+        path: "^/arcadia/api/animal/showlastAnimals/{habitatId}",
+        roles: PUBLIC_ACCESS,
+      }
+    - {
+        path: "^/arcadia/api/animal/showAllAnimals/{habitatId}",
+        roles: PUBLIC_ACCESS,
+      }
+    - { path: "^/arcadia/api/animal/showAnimalsHome", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/avis/new", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/avis/valides", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/habitat/showAll", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/habitat/show/{id}", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/rapport/last/{animalId}", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api/service/showAll", roles: PUBLIC_ACCESS }
+    - { path: "^/arcadia/api", roles: ROLE_USER }
+    - { path: "^/arcadia/api/registration", roles: ROLE_ADMIN }
 
 when@test:
   security:
