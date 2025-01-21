@@ -19,7 +19,7 @@ class AvisController extends AbstractController
         private SerializerInterface $serializer,
     ) {}
 
-    #[Route('/new', name: 'new')]
+    #[Route('/new', name: 'new', methods:'POST')]
     public function new(Request $request): JsonResponse
     {
         if ($request) {

@@ -32,7 +32,7 @@ class HabitatController extends AbstractController
             $habitat = $this->serializer->deserialize(json_encode($data), Habitat::class, 'json');
 
             $habitat->setCreatedAt(new DateTimeImmutable());
-
+            
             if ($file) {
                 $habitat->setImageFile($file);
             }

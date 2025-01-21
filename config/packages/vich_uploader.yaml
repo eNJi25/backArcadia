@@ -4,19 +4,19 @@ vich_uploader:
     mappings:
        services:
            uri_prefix: /images/services
-           upload_destination: '%kernel.project_dir%/public/images/services'
+           upload_destination: '%kernel.project_dir%/htdocs/images/services'
            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
            delete_on_remove: true
            delete_on_update: true
        habitats:
            uri_prefix: /images/habitats
-           upload_destination: '%kernel.project_dir%/public/images/habitats'
+           upload_destination: '%kernel.project_dir%/htdocs/images/habitats'
            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
            delete_on_remove: true
            delete_on_update: true
        animaux:
            uri_prefix: /images/animaux
-           upload_destination: '%kernel.project_dir%/public/images/animaux'
+           upload_destination: '%kernel.project_dir%/htdocs/images/animaux'
            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
            delete_on_remove: true
            delete_on_update: true

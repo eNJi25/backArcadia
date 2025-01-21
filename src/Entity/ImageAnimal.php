@@ -89,7 +89,7 @@ class ImageAnimal
 
     public function getImageName(): ?string
     {
-        return $this->imageName;
+        return "http://arcadia2024.kesug.com/images/animaux/{$this->imageName}";
     }
 
     public function setImageSize(?int $imageSize): static
