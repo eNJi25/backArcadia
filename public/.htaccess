@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Autoriser l'accès direct aux fichiers existants (images, css, js, etc.)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Autoriser l'accès aux images, js, css, etc.
+    RewriteRule ^images/(.*)$ /public/images/$1 [L]
+
+    # Rediriger le reste vers index.php pour gérer les routes Symfony
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /index.php/$1 [QSA,L]
+</IfModule>
+
+<FilesMatch "\.(jpg|jpeg|png|gif|svg|webp|css|js)$">
+    Require all granted
+</FilesMatch>
