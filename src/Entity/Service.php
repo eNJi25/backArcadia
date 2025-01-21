@@ -125,7 +125,7 @@ class Service
 
     public function getImageName(): ?string
     {
-        return "http://arcadia2024.kesug.com/services/animaux/{$this->imageName}";
+        return "http://arcadia2024.alwaysdata.net/services/animaux/{$this->imageName}";
     }
 
     public function setImageSize(?int $imageSize): static
