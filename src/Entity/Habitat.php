@@ -153,7 +153,7 @@ class Habitat
 
     public function getImageName(): ?string
     {
-        return "http:/arcadia2024.alwaysdata.net/animaux/{$this->imageName}";
+        return "https:/arcadia2024.alwaysdata.net/images/habitats/{$this->imageName}";
     }
 
     public function setImageSize(?int $imageSize): static
