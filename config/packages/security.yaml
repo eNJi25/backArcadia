@@ -49,7 +49,10 @@ security:
     - { path: "^/arcadia/api/rapport/last/\\d+$", roles: PUBLIC_ACCESS }
     - { path: "^/arcadia/api/service/showAll", roles: PUBLIC_ACCESS }
 
-    # Routes nécessitant un utilisateur authentifié
+    # Route spécifique nécessitant un utilisateur authentifié
+    - { path: "^/arcadia/api/avis/toValidate", roles: ROLE_USER }
+
+    # Toutes les autres routes nécessitent un utilisateur authentifié
     - { path: "^/arcadia/api", roles: ROLE_USER }
 
     # Routes nécessitant un administrateur

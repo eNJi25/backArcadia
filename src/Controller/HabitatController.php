@@ -55,9 +55,18 @@ class HabitatController extends AbstractController
     public function showAll(): JsonResponse
     {
         $habitats = $this->repo->findAll();
-        $responseData = $this->serializer->serialize($habitats, 'json');
 
-        return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+        $responseData = array_map(function ($habitat) {
+            return [
+                'id' => $habitat->getId(),
+                'nom' => $habitat->getNom(),
+                'description' => $habitat->getDescription(),
+                'commentaireVeterinaire' => $habitat->getCommentaireVeterinaire(),
+                'imageName' => $habitat->getImageName(),
+            ];
+        }, $habitats);
+
+        return new JsonResponse($responseData, Response::HTTP_OK);
     }
 
     #[Route(path: '/show/{id}', name: 'show', methods: 'GET')]
@@ -67,9 +76,15 @@ class HabitatController extends AbstractController
         $habitat = $this->repo->findOneBy(['id' => $id]);
 
         if ($habitat) {
-            $responseData = $this->serializer->serialize($habitat, 'json');
+            $responseData = [
+                'id' => $habitat->getId(),
+                'nom' => $habitat->getNom(),
+                'description' => $habitat->getDescription(),
+                'commentaireVeterinaire' => $habitat->getCommentaireVeterinaire(),
+                'imageName' => $habitat->getImageName(),
+            ];
 
-            return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+            return new JsonResponse($responseData, Response::HTTP_OK);
         }
 
         return new JsonResponse(["message" => "Aucun habitat"], Response::HTTP_NOT_FOUND);
