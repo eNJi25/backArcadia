@@ -1,10 +1,14 @@
 nelmio_cors:
-    defaults:
-        origin_regex: true
-        allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
-        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization']
-        expose_headers: ['Link']
-        max_age: 3600
-    paths:
-        '^/': null
+  defaults:
+    origin_regex: true
+    allow_origin: ["%env(CORS_ALLOW_ORIGIN)%"] # Assure-toi que cette variable est bien configurée dans ton fichier .env
+    allow_methods: ["GET", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
+    allow_headers: ["Content-Type", "Authorization", "X-AUTH-TOKEN"] # Ajout de X-AUTH-TOKEN
+    expose_headers: ["Link"]
+    max_age: 3600
+  paths:
+    "^/": # Cela applique les règles CORS à toutes les routes
+      allow_origin: ["%env(CORS_ALLOW_ORIGIN)%"] # Les origines autorisées
+      allow_methods: ["GET", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
+      allow_headers: ["Content-Type", "Authorization", "X-AUTH-TOKEN"]
+      max_age: 3600
