@@ -50,10 +50,10 @@ security:
     - { path: "^/arcadia/api/service/showAll", roles: PUBLIC_ACCESS }
 
     # Route spécifique nécessitant un utilisateur authentifié
-    - { path: "^/arcadia/api/avis/toValidate", roles: ROLE_USER }
+    - { path: "^/arcadia/api/avis/toValidate", roles: [ROLE_USER, ROLE_ADMIN] }
 
     # Toutes les autres routes nécessitent un utilisateur authentifié
-    - { path: "^/arcadia/api", roles: ROLE_USER }
+    - { path: "^/arcadia/api", roles: [ROLE_USER, ROLE_ADMIN] }
 
     # Routes nécessitant un administrateur
     - { path: "^/arcadia/api/registration", roles: ROLE_ADMIN }
