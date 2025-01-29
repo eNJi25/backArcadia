@@ -55,9 +55,14 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/account/me', name: 'account_me', methods: 'GET')]
-    public function me(): JsonResponse
+    #[Route('/account/me', name: 'account_me', methods: ['GET', 'OPTIONS'])]
+    public function me(Request $request): JsonResponse
     {
+        // Gérer la requête préflight CORS
+        if ($request->isMethod('OPTIONS')) {
+            return new JsonResponse(null, Response::HTTP_OK);
+        }
+
         $user = $this->getUser();
         $responseData = $this->serializer->serialize($user, 'json');
 
